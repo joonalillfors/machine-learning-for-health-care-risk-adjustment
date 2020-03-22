@@ -1,14 +1,16 @@
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Lasso, Ridge
 from sklearn import tree
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 import lightgbm as lgb
+import xgboost as xgb
+from xgboost.sklearn import XGBRegressor
 
 def main():
     # from practice info drop rurality, atypical characteristics and practice type (not in 15-16) and quarter used (not in 18-19)
     # indcludecols15 = ['NHSEnglandRegionCode','CCGCode','PracticeCloseDate','ContractType','DispensingPractice','QuarterUsedForPatientData','NumberOfRegisteredPatientsLastKnownFigure','NumberOfWeightedPatientsLastKnownFigure','AveragePaymentPerRegisteredPatient_£','AveragePaymentPerWeightedPatient_£','TotalNHSPaymentsToGeneralPractice_£','DeductionsForPensionsLeviesAndPrescriptionChargeIncome_£','TotalNHSPaymentsToGeneralPracticeMinusDeductions_£']
-    indcludecols15 = ['NHSEnglandRegionCode','ContractType','DispensingPractice','QuarterUsedForPatientData','NumberOfRegisteredPatientsLastKnownFigure','NumberOfWeightedPatientsLastKnownFigure','TotalNHSPaymentsToGeneralPractice_£']
+    indcludecols15 = ['NHSEnglandRegionCode','DispensingPractice','ContractType','NumberOfRegisteredPatientsLastKnownFigure','NumberOfWeightedPatientsLastKnownFigure','TotalNHSPaymentsToGeneralPractice_£']
     indcludecols16 = ['NHSEnglandRegionLocalOfficeCode','ContractType','DispensingPractice','QuarterUsedForPatientData','NumberofRegisteredPatientsLastKnownFigure','NumberofWeightedPatientsLastKnownFigure','AveragePaymentsPerRegisteredPatient_£','AveragePaymentsPerWeightedPatient_£','TotalNHSPaymentsToGeneralPractice_£','DeductionsForPensionsLeviesAndPrescriptionChargeIncome_£','TotalNHSPaymentsToGeneralPracticeMinusDeductions_£']
     indcludecols17 = ['NHS England (Region, local office) Code','CCG Code','Practice Code','Practice Postcode','Practice Open Date','Practice Close Date','Contract Type','Dispensing Practice','Quarter used for patient data','Number of Registered Patients (Last Known Figure)','Number of Weighted Patients (Last Known Figure)','Average payments per registered patient','Average payments per weighted patient','Total NHS Payments to General Practice',"Deductions for Pensions, Levies and Prescription Charge Income",'Total NHS Payments to General Practice Minus Deductions']
     indcludecols18 = ['NHS England and NHS Improvement (Region, local office) Code','CCG Code','Practice Code','Practice Postcode','Practice Open Date','Practice Close Date','Contract Type','Dispensing Practice','Average Number of Registered Patients','Average Number of Weighted Patients','Average payments per registered patient','Average payments per weighted patient','Total NHS Payments to General Practice',"Deductions for Pensions, Levies and Prescription Charge Income",'Total NHS Payments to General Practice Minus Deductions']
@@ -62,12 +64,31 @@ def main():
     print("LINEAR REGRESSION SCORE:",linreg.score(test_x, test_y))
     print("LINEAR REGRESSION SCORE:", linreg.score(train_x, train_y))
 
+    lasso = Lasso(alpha=100, max_iter=1000).fit(train_x, train_y)
+    print("LASSO SCORE:",lasso.score(test_x, test_y))
+    print("LASSO SCORE:",lasso.score(train_x, train_y))
+
+    ridge = Ridge(alpha=0.5).fit(train_x, train_y)
+    print("RIDGE SCORE:",ridge.score(test_x, test_y))
+    print("RIDGE SCORE:",ridge.score(train_x, train_y))
+
     dtr = tree.DecisionTreeRegressor().fit(train_x, train_y)
     print("DECISION TREE SCORE:",dtr.score(test_x, test_y))
     print("DECISION TREE SCORE:", dtr.score(train_x, train_y))
 
-    rf = RandomForestRegressor(n_estimators=30).fit(train_x, train_y)
-    print("RANDOM FOREST SCORE:",rf.score(test_x, test_y))
-    print("RANDOM FOREST SCORE:", rf.score(train_x, train_y))
+    # rf = RandomForestRegressor(n_estimators=200).fit(train_x, train_y)
+    # print("RANDOM FOREST SCORE:",rf.score(test_x, test_y))
+    # print("RANDOM FOREST SCORE:", rf.score(train_x, train_y))
+
+    # gb = GradientBoostingRegressor(n_estimators=200, learning_rate=0.05, max_depth=6).fit(train_x, train_y)
+    # print("GRADIENT BOOSTING SCORE:", gb.score(test_x, test_y))
+    # print("GRADIENT BOOSTING SCORE:", gb.score(train_x, train_y))
+
+    xgboost = XGBRegressor(n_extimators=100, 
+                           learning_rate=0.1, 
+                           max_depth=7,
+                           subsample=0.8).fit(train_x, train_y)
+    print("XGBOOST SCORE:", xgboost.score(test_x, test_y))
+    print("XGBOOST SCORE:", xgboost.score(train_x, train_y))
 
 main()
