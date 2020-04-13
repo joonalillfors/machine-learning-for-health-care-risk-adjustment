@@ -9,7 +9,6 @@ import lightgbm as lgb
 import xgboost as xgb
 from xgboost.sklearn import XGBRegressor
 from lightgbm.sklearn import LGBMRegressor
-from sklearn.model_selection import GridSearchCV
 
 def printResults(model, test_x, test_y, val_x, val_y, train_x, train_y, name):
     model_pred_val_y = model.predict(val_x)
