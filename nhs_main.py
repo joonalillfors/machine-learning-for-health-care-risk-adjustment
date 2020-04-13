@@ -17,8 +17,8 @@ def printResults(model, test_x, test_y, val_x, val_y, train_x, train_y, name):
     print(f"{name} TST SCORE:", model.score(test_x, test_y))
     print(f"{name} VAL SCORE:", model.score(val_x, val_y))
     print(f"{name} TRA SCORE:", model.score(train_x, train_y))
-    # print(f"{name} TST RMSE:", mean_squared_error(test_y, model_pred_test_y, squared=False))
-    # print(f"{name} VAL RMSE:", mean_squared_error(val_y, model_pred_val_y, squared=False))
+    print(f"{name} TST RMSE:", mean_squared_error(test_y, model_pred_test_y, squared=False))
+    print(f"{name} VAL RMSE:", mean_squared_error(val_y, model_pred_val_y, squared=False))
     print(f"{name} TST MAE:", mean_absolute_error(test_y, model_pred_test_y))
     print(f"{name} VAL MAE:", mean_absolute_error(val_y, model_pred_val_y))
 
@@ -146,9 +146,8 @@ def main():
 
     # MLP
     mlp = MLPRegressor(hidden_layer_sizes=(10,),
-                       shuffle=True,
                        solver='lbfgs',
-                       max_iter=600,
+                       max_iter=1500,
                        learning_rate_init=0.005,
                        alpha=0.0035
                        ).fit(train_x, train_y)
