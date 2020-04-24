@@ -122,6 +122,7 @@ def main():
                                    subsample=0.8,
                                    ).fit(train_x, train_y)
     printResults(gb, test_x, test_y, val_x, val_y, train_x, train_y, "GRADIENT BOOSTING")
+    print(gb.feature_importances_)
 
     # XGBOOST
     xgboost = XGBRegressor(n_extimators=100, 
@@ -131,6 +132,7 @@ def main():
                            colsample_bylevel=0.9,
                            ).fit(train_x, train_y)
     printResults(xgboost, test_x, test_y, val_x, val_y, train_x, train_y, "XGBOOST")
+    print(xgboost.feature_importances_)
 
     # LIGHTGBM
     lightgbm = LGBMRegressor(n_estimators=300,
